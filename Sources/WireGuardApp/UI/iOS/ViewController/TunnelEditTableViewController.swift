@@ -34,7 +34,10 @@ class TunnelEditTableViewController: UITableViewController {
     let interfaceFieldsBySection: [[TunnelViewModel.InterfaceField]] = [
         [.name],
         [.privateKey, .publicKey, .generateKeyPair],
-        [.addresses, .listenPort, .mtu, .dns]
+        [.addresses, .listenPort, .dns, .mtu],
+        [.junkPacketCount, .junkPacketMinSize, .junkPacketMaxSize,
+         .initPacketJunkSize, .responsePacketJunkSize,
+         .initPacketMagicHeader, .responsePacketMagicHeader, .underloadPacketMagicHeader, .transportPacketMagicHeader]
     ]
 
     let peerFields: [TunnelViewModel.PeerField] = [
@@ -253,6 +256,10 @@ extension TunnelEditTableViewController {
             cell.keyboardType = .default
         case .status, .toggleStatus:
             fatalError("Unexpected interface field")
+        case .junkPacketCount, .junkPacketMinSize, .junkPacketMaxSize,
+                .initPacketJunkSize, .responsePacketJunkSize,
+                .initPacketMagicHeader, .responsePacketMagicHeader, .underloadPacketMagicHeader, .transportPacketMagicHeader:
+            cell.keyboardType = .numberPad
         }
 
         cell.isValueValid = (!tunnelViewModel.interfaceData.fieldsWithError.contains(field))

@@ -36,6 +36,15 @@ extension InterfaceConfiguration: Equatable {
             lhs.listenPort == rhs.listenPort &&
             lhs.mtu == rhs.mtu &&
             lhs.dns == rhs.dns &&
-            lhs.dnsSearch == rhs.dnsSearch
+            lhs.dnsSearch == rhs.dnsSearch &&
+            lhs.junkPacketCount == rhs.junkPacketCount &&
+            lhs.junkPacketMinSize == rhs.junkPacketMinSize &&
+            lhs.junkPacketMaxSize == rhs.junkPacketMaxSize &&
+            lhs.initPacketJunkSize == rhs.initPacketJunkSize &&
+            lhs.responsePacketJunkSize == rhs.responsePacketJunkSize &&
+            lhs.initPacketMagicHeader == rhs.initPacketMagicHeader &&
+            lhs.responsePacketMagicHeader == rhs.responsePacketMagicHeader &&
+            lhs.underloadPacketMagicHeader == rhs.underloadPacketMagicHeader &&
+            lhs.transportPacketMagicHeader == rhs.transportPacketMagicHeader
     }
 }
