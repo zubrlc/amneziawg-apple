@@ -76,6 +76,15 @@ extension TunnelConfiguration {
         interfaceConfiguration?.dns = base?.interface.dns ?? []
         interfaceConfiguration?.dnsSearch = base?.interface.dnsSearch ?? []
         interfaceConfiguration?.mtu = base?.interface.mtu
+        interfaceConfiguration?.junkPacketCount = base?.interface.junkPacketCount
+        interfaceConfiguration?.junkPacketMinSize = base?.interface.junkPacketMinSize
+        interfaceConfiguration?.junkPacketMaxSize = base?.interface.junkPacketMaxSize
+        interfaceConfiguration?.initPacketJunkSize = base?.interface.initPacketJunkSize
+        interfaceConfiguration?.responsePacketJunkSize = base?.interface.responsePacketJunkSize
+        interfaceConfiguration?.initPacketMagicHeader = base?.interface.initPacketMagicHeader
+        interfaceConfiguration?.responsePacketMagicHeader = base?.interface.responsePacketMagicHeader
+        interfaceConfiguration?.underloadPacketMagicHeader = base?.interface.underloadPacketMagicHeader
+        interfaceConfiguration?.transportPacketMagicHeader = base?.interface.transportPacketMagicHeader
 
         if let interfaceConfiguration = interfaceConfiguration {
             self.init(name: base?.name, interface: interfaceConfiguration, peers: peerConfigurations)

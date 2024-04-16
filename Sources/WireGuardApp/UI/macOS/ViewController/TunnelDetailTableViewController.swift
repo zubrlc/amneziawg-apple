@@ -35,7 +35,10 @@ class TunnelDetailTableViewController: NSViewController {
 
     static let interfaceFields: [TunnelViewModel.InterfaceField] = [
         .name, .status, .publicKey, .addresses,
-        .listenPort, .mtu, .dns, .toggleStatus
+        .listenPort, .dns, .mtu, .toggleStatus,
+        .junkPacketCount, .junkPacketMinSize, .junkPacketMaxSize,
+        .initPacketJunkSize, .responsePacketJunkSize,
+        .initPacketMagicHeader, .responsePacketMagicHeader, .underloadPacketMagicHeader, .transportPacketMagicHeader
     ]
 
     static let peerFields: [TunnelViewModel.PeerField] = [
