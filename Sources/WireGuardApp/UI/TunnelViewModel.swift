@@ -334,156 +334,124 @@ class TunnelViewModel {
                 config.dnsSearch = dnsSearch
             }
 
-            if let junkPacketCountString = scratchpad[.junkPacketCount],
-               let junkPacketCount = UInt16(junkPacketCountString) {
-                config.junkPacketCount = junkPacketCount
-            } else {
-                fieldsWithError.insert(.junkPacketCount)
-                errorMessages.append(tr("alertInvalidInterfaceMessageJunkPacketCountInvalid"))
+            if let junkPacketCountString = scratchpad[.junkPacketCount], !junkPacketCountString.isEmpty {
+                if let junkPacketCount = UInt16(junkPacketCountString) {
+                    config.junkPacketCount = junkPacketCount
+                } else {
+                    fieldsWithError.insert(.junkPacketCount)
+                    errorMessages.append(tr("alertInvalidInterfaceMessageJunkPacketCountInvalid"))
+                }
             }
 
-            if let junkPacketMinSizeString = scratchpad[.junkPacketMinSize],
-               let junkPacketMinSize = UInt16(junkPacketMinSizeString) {
-                config.junkPacketMinSize = junkPacketMinSize
-            } else {
-                fieldsWithError.insert(.junkPacketMinSize)
-                errorMessages.append(tr("alertInvalidInterfaceMessageJunkPacketMinSizeInvalid"))
+            if let junkPacketMinSizeString = scratchpad[.junkPacketMinSize], !junkPacketMinSizeString.isEmpty {
+                if let junkPacketMinSize = UInt16(junkPacketMinSizeString) {
+                    config.junkPacketMinSize = junkPacketMinSize
+                } else {
+                    fieldsWithError.insert(.junkPacketMinSize)
+                    errorMessages.append(tr("alertInvalidInterfaceMessageJunkPacketMinSizeInvalid"))
+                }
             }
 
-            if let junkPacketMaxSizeString = scratchpad[.junkPacketMaxSize],
-               let junkPacketMaxSize = UInt16(junkPacketMaxSizeString) {
-                config.junkPacketMaxSize = junkPacketMaxSize
-            } else {
-                fieldsWithError.insert(.junkPacketMinSize)
-                errorMessages.append(tr("alertInvalidInterfaceMessageJunkPacketMaxSizeInvalid"))
+            if let junkPacketMaxSizeString = scratchpad[.junkPacketMaxSize], !junkPacketMaxSizeString.isEmpty {
+                if let junkPacketMaxSize = UInt16(junkPacketMaxSizeString) {
+                    config.junkPacketMaxSize = junkPacketMaxSize
+                } else {
+                    fieldsWithError.insert(.junkPacketMinSize)
+                    errorMessages.append(tr("alertInvalidInterfaceMessageJunkPacketMaxSizeInvalid"))
+                }
             }
 
-            if let initPacketJunkSizeString = scratchpad[.initPacketJunkSize],
-               let initPacketJunkSize = UInt16(initPacketJunkSizeString) {
-                config.initPacketJunkSize = initPacketJunkSize
-            } else {
-                fieldsWithError.insert(.initPacketJunkSize)
-                errorMessages.append(tr("alertInvalidInterfaceMessageInitPacketJunkSizeInvalid"))
+            if let initPacketJunkSizeString = scratchpad[.initPacketJunkSize], !initPacketJunkSizeString.isEmpty {
+                if let initPacketJunkSize = UInt16(initPacketJunkSizeString) {
+                    config.initPacketJunkSize = initPacketJunkSize
+                } else {
+                    fieldsWithError.insert(.initPacketJunkSize)
+                    errorMessages.append(tr("alertInvalidInterfaceMessageInitPacketJunkSizeInvalid"))
+                }
             }
 
-            if let responsePacketJunkSizeString = scratchpad[.responsePacketJunkSize],
-               let responsePacketJunkSize = UInt16(responsePacketJunkSizeString) {
-                config.responsePacketJunkSize = responsePacketJunkSize
-            } else {
-                fieldsWithError.insert(.responsePacketJunkSize)
-                errorMessages.append(tr("alertInvalidInterfaceMessageResponsePacketJunkSizeInvalid"))
+            if let responsePacketJunkSizeString = scratchpad[.responsePacketJunkSize], !responsePacketJunkSizeString.isEmpty {
+                if let responsePacketJunkSize = UInt16(responsePacketJunkSizeString) {
+                    config.responsePacketJunkSize = responsePacketJunkSize
+                } else {
+                    fieldsWithError.insert(.responsePacketJunkSize)
+                    errorMessages.append(tr("alertInvalidInterfaceMessageResponsePacketJunkSizeInvalid"))
+                }
             }
 
-            if let initPacketMagicHeaderString = scratchpad[.initPacketMagicHeader],
-               let initPacketMagicHeader = UInt32(initPacketMagicHeaderString) {
-                config.initPacketMagicHeader = initPacketMagicHeader
-            } else {
-                fieldsWithError.insert(.initPacketMagicHeader)
-                errorMessages.append(tr("alertInvalidInterfaceMessageInitPacketMagicHeaderInvalid"))
+            if let initPacketMagicHeaderString = scratchpad[.initPacketMagicHeader], !initPacketMagicHeaderString.isEmpty {
+                config.initPacketMagicHeader = initPacketMagicHeaderString
             }
 
-            if let responsePacketMagicHeaderString = scratchpad[.responsePacketMagicHeader],
-               let responsePacketMagicHeader = UInt32(responsePacketMagicHeaderString) {
-                config.responsePacketMagicHeader = responsePacketMagicHeader
-            } else {
-                fieldsWithError.insert(.responsePacketMagicHeader)
-                errorMessages.append(tr("alertInvalidInterfaceMessageResponsePacketMagicHeaderInvalid"))
+            if let responsePacketMagicHeaderString = scratchpad[.responsePacketMagicHeader], !responsePacketMagicHeaderString.isEmpty {
+                config.responsePacketMagicHeader = responsePacketMagicHeaderString
             }
 
-            if let underloadPacketMagicHeaderString = scratchpad[.underloadPacketMagicHeader],
-               let underloadPacketMagicHeader = UInt32(underloadPacketMagicHeaderString) {
-                config.underloadPacketMagicHeader = underloadPacketMagicHeader
-            } else {
-                fieldsWithError.insert(.underloadPacketMagicHeader)
-                errorMessages.append(tr("alertInvalidInterfaceMessageUnderloadPacketMagicHeaderInvalid"))
+            if let underloadPacketMagicHeaderString = scratchpad[.underloadPacketMagicHeader], !underloadPacketMagicHeaderString.isEmpty {
+                config.underloadPacketMagicHeader = underloadPacketMagicHeaderString
             }
 
-            if let transportPacketMagicHeaderString = scratchpad[.transportPacketMagicHeader],
-               let transportPacketMagicHeader = UInt32(transportPacketMagicHeaderString) {
-                config.transportPacketMagicHeader = transportPacketMagicHeader
-            } else {
-                fieldsWithError.insert(.transportPacketMagicHeader)
-                errorMessages.append(tr("alertInvalidInterfaceMessageTransportPacketMagicHeaderInvalid"))
+            if let transportPacketMagicHeaderString = scratchpad[.transportPacketMagicHeader], !transportPacketMagicHeaderString.isEmpty {
+                config.transportPacketMagicHeader = transportPacketMagicHeaderString
             }
 
-            if let cookieReplyPacketJunkSizeString = scratchpad[.cookieReplyPacketJunkSize],
-               let cookieReplyPacketJunkSize = UInt16(cookieReplyPacketJunkSizeString) {
-                config.cookieReplyPacketJunkSize = cookieReplyPacketJunkSize
-            } else {
-                fieldsWithError.insert(.cookieReplyPacketJunkSize)
-                errorMessages.append(tr("alertInvalidInterfaceMessageCookieReplyPacketJunkSizeInvalid"))
+            if let cookieReplyPacketJunkSizeString = scratchpad[.cookieReplyPacketJunkSize], !cookieReplyPacketJunkSizeString.isEmpty {
+                if let cookieReplyPacketJunkSize = UInt16(cookieReplyPacketJunkSizeString) {
+                    config.cookieReplyPacketJunkSize = cookieReplyPacketJunkSize
+                } else {
+                    fieldsWithError.insert(.cookieReplyPacketJunkSize)
+                    errorMessages.append(tr("alertInvalidInterfaceMessageCookieReplyPacketJunkSizeInvalid"))
+                }
             }
 
-            if let transportPacketJunkSizeString = scratchpad[.transportPacketJunkSize],
-               let transportPacketJunkSize = UInt16(transportPacketJunkSizeString) {
-                config.transportPacketJunkSize = transportPacketJunkSize
-            } else {
-                fieldsWithError.insert(.transportPacketJunkSize)
-                errorMessages.append(tr("alertInvalidInterfaceMessageTransportPacketJunkSizeInvalid"))
+            if let transportPacketJunkSizeString = scratchpad[.transportPacketJunkSize], !transportPacketJunkSizeString.isEmpty {
+                if let transportPacketJunkSize = UInt16(transportPacketJunkSizeString) {
+                    config.transportPacketJunkSize = transportPacketJunkSize
+                } else {
+                    fieldsWithError.insert(.transportPacketJunkSize)
+                    errorMessages.append(tr("alertInvalidInterfaceMessageTransportPacketJunkSizeInvalid"))
+                }
             }
 
-            if let specialJunk1String = scratchpad[.specialJunk1] {
+            if let specialJunk1String = scratchpad[.specialJunk1], !specialJunk1String.isEmpty {
                 config.specialJunk1 = specialJunk1String
-            } else {
-                fieldsWithError.insert(.specialJunk1)
-                errorMessages.append(tr("alertInvalidInterfaceMessageSpecialJunk1Invalid"))
             }
 
-            if let specialJunk2String = scratchpad[.specialJunk2] {
+            if let specialJunk2String = scratchpad[.specialJunk2], !specialJunk2String.isEmpty {
                 config.specialJunk2 = specialJunk2String
-            } else {
-                fieldsWithError.insert(.specialJunk2)
-                errorMessages.append(tr("alertInvalidInterfaceMessageSpecialJunk2Invalid"))
             }
 
-            if let specialJunk3String = scratchpad[.specialJunk3] {
+            if let specialJunk3String = scratchpad[.specialJunk3], !specialJunk3String.isEmpty {
                 config.specialJunk3 = specialJunk3String
-            } else {
-                fieldsWithError.insert(.specialJunk3)
-                errorMessages.append(tr("alertInvalidInterfaceMessageSpecialJunk3Invalid"))
             }
 
-            if let specialJunk4String = scratchpad[.specialJunk4] {
+            if let specialJunk4String = scratchpad[.specialJunk4], !specialJunk4String.isEmpty {
                 config.specialJunk4 = specialJunk4String
-            } else {
-                fieldsWithError.insert(.specialJunk4)
-                errorMessages.append(tr("alertInvalidInterfaceMessageSpecialJunk4Invalid"))
             }
 
-            if let specialJunk5String = scratchpad[.specialJunk5] {
+            if let specialJunk5String = scratchpad[.specialJunk5], !specialJunk5String.isEmpty {
                 config.specialJunk5 = specialJunk5String
-            } else {
-                fieldsWithError.insert(.specialJunk5)
-                errorMessages.append(tr("alertInvalidInterfaceMessageSpecialJunk5Invalid"))
             }
 
-            if let controlledJunk1String = scratchpad[.controlledJunk1] {
+            if let controlledJunk1String = scratchpad[.controlledJunk1], !controlledJunk1String.isEmpty {
                 config.controlledJunk1 = controlledJunk1String
-            } else {
-                fieldsWithError.insert(.controlledJunk1)
-                errorMessages.append(tr("alertInvalidInterfaceMessageControlledJunk1Invalid"))
             }
 
-            if let controlledJunk2String = scratchpad[.controlledJunk2] {
+            if let controlledJunk2String = scratchpad[.controlledJunk2], !controlledJunk2String.isEmpty {
                 config.controlledJunk2 = controlledJunk2String
-            } else {
-                fieldsWithError.insert(.controlledJunk2)
-                errorMessages.append(tr("alertInvalidInterfaceMessageControlledJunk2Invalid"))
             }
 
-            if let controlledJunk3String = scratchpad[.controlledJunk3] {
+            if let controlledJunk3String = scratchpad[.controlledJunk3], !controlledJunk3String.isEmpty {
                 config.controlledJunk3 = controlledJunk3String
-            } else {
-                fieldsWithError.insert(.controlledJunk3)
-                errorMessages.append(tr("alertInvalidInterfaceMessageControlledJunk3Invalid"))
             }
 
-            if let specialHandshakeTimeoutString = scratchpad[.specialHandshakeTimeout],
-               let specialHandshakeTimeout = Int(specialHandshakeTimeoutString) {
-                config.specialHandshakeTimeout = specialHandshakeTimeout
-            } else {
-                fieldsWithError.insert(.specialHandshakeTimeout)
-                errorMessages.append(tr("alertInvalidInterfaceMessageSpecialHandshakeTimeoutInvalid"))
+            if let specialHandshakeTimeoutString = scratchpad[.specialHandshakeTimeout], !specialHandshakeTimeoutString.isEmpty {
+                if let specialHandshakeTimeout = Int(specialHandshakeTimeoutString) {
+                    config.specialHandshakeTimeout = specialHandshakeTimeout
+                } else {
+                    fieldsWithError.insert(.specialHandshakeTimeout)
+                    errorMessages.append(tr("alertInvalidInterfaceMessageSpecialHandshakeTimeoutInvalid"))
+                }
             }
 
 
