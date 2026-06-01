@@ -56,6 +56,18 @@ public class WireGuardAdapter {
     /// Adapter state.
     private var state: State = .stopped
 
+    /// Signature (status + interface names) of the network path last applied to the
+    /// backend. Used to skip redundant socket rebinds when the path hasn't actually
+    /// changed: on cellular `NWPathMonitor` fires every few seconds with an identical
+    /// interface list, and rebinding each time tears down the session (reconnect storm).
+    private var lastAppliedPathSignature: String?
+
+    /// Pending debounced path update, used to coalesce bursts of path callbacks.
+    private var pendingPathUpdate: DispatchWorkItem?
+
+    /// How long to wait for the network to settle before applying a path update.
+    private static let pathUpdateDebounceInterval: DispatchTimeInterval = .milliseconds(1000)
+
     /// Tunnel device file descriptor.
     private var tunnelFileDescriptor: Int32? {
         var ctlInfo = ctl_info()
@@ -142,6 +154,7 @@ public class WireGuardAdapter {
         wgSetLogger(nil, nil)
 
         // Cancel network monitor
+        pendingPathUpdate?.cancel()
         networkMonitor?.cancel()
 
         // Shutdown the tunnel
@@ -183,7 +196,7 @@ public class WireGuardAdapter {
 
             let networkMonitor = NWPathMonitor()
             networkMonitor.pathUpdateHandler = { [weak self] path in
-                self?.didReceivePathUpdate(path: path)
+                self?.enqueuePathUpdate(path: path)
             }
             networkMonitor.start(queue: self.workQueue)
 
@@ -224,6 +237,10 @@ public class WireGuardAdapter {
                 completionHandler(.invalidState)
                 return
             }
+
+            self.pendingPathUpdate?.cancel()
+            self.pendingPathUpdate = nil
+            self.lastAppliedPathSignature = nil
 
             self.networkMonitor?.cancel()
             self.networkMonitor = nil
@@ -411,6 +428,26 @@ public class WireGuardAdapter {
         }
     }
 
+    /// Builds a stable signature of the network path so redundant updates can be
+    /// ignored. Based on connectivity status and interface names, matching WireGuard's
+    /// roaming model: rebind on an actual interface change, not on every path callback.
+    private func pathSignature(for path: Network.NWPath) -> String {
+        let interfaces = path.availableInterfaces.map { $0.name }.joined(separator: ",")
+        return "\(path.status)|\(interfaces)"
+    }
+
+    /// Debounces path updates so a burst of `NWPathMonitor` callbacks results in a
+    /// single backend update once the network has settled.
+    private func enqueuePathUpdate(path: Network.NWPath) {
+        self.pendingPathUpdate?.cancel()
+
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.didReceivePathUpdate(path: path)
+        }
+        self.pendingPathUpdate = workItem
+        self.workQueue.asyncAfter(deadline: .now() + Self.pathUpdateDebounceInterval, execute: workItem)
+    }
+
     /// Helper method used by network path monitor.
     /// - Parameter path: new network path
     private func didReceivePathUpdate(path: Network.NWPath) {
@@ -424,6 +461,13 @@ public class WireGuardAdapter {
         switch self.state {
         case .started(let handle, let settingsGenerator):
             if path.status.isSatisfiable {
+                // Skip redundant rebinds: on cellular `NWPathMonitor` fires every few
+                // seconds with an unchanged interface list, and each SetConfig/BumpSockets
+                // tears down the WireGuard session, causing a reconnect storm.
+                let signature = self.pathSignature(for: path)
+                guard signature != self.lastAppliedPathSignature else { return }
+                self.lastAppliedPathSignature = signature
+
                 let (wgConfig, resolutionResults) = settingsGenerator.endpointUapiConfiguration()
                 self.logEndpointResolutionResults(resolutionResults)
 
@@ -433,6 +477,7 @@ public class WireGuardAdapter {
             } else {
                 self.logHandler(.verbose, "Connectivity offline, pausing backend.")
 
+                self.lastAppliedPathSignature = nil
                 self.state = .temporaryShutdown(settingsGenerator)
                 wgTurnOff(handle)
             }
@@ -452,6 +497,7 @@ public class WireGuardAdapter {
                     try self.startWireGuardBackend(wgConfig: wgConfig),
                     settingsGenerator
                 )
+                self.lastAppliedPathSignature = self.pathSignature(for: path)
             } catch {
                 self.logHandler(.error, "Failed to restart backend: \(error.localizedDescription)")
             }
